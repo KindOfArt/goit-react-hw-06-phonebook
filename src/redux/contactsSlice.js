@@ -3,29 +3,20 @@ import persistReducer from 'redux-persist/es/persistReducer';
 import storage from 'redux-persist/lib/storage';
 
 const persistConfig = {
-  key: 'contacts',
+  key: 'contactsList',
   storage,
-  whiteList: ['contacts', 'filterField'],
+  whiteList: ['list'],
 };
 
 const contactsSlice = createSlice({
-  name: 'contacts',
-  initialState: {
-    contacts: [],
-    filterField: '',
-  },
+  name: 'contactsList',
+  initialState: { list: [] },
   reducers: {
     addContact(state, action) {
-      state.contacts.push(action.payload);
+      state.list.push(action.payload);
     },
     deleteContact(state, action) {
-      return {
-        contacts: state.contacts.filter(({ id }) => id !== action.payload),
-        filterField: state.filterField,
-      };
-    },
-    filterChange(state, action) {
-      state.filterField = action.payload;
+      return { list: state.list.filter(({ id }) => id !== action.payload) };
     },
   },
 });
@@ -35,8 +26,6 @@ export const contactsPersistReducer = persistReducer(
   contactsSlice.reducer
 );
 
-export const { addContact, deleteContact, filterChange } =
-  contactsSlice.actions;
+export const { addContact, deleteContact } = contactsSlice.actions;
 
-export const getContactsList = state => state.phonebook.contacts;
-export const getFilterFieldValue = state => state.phonebook.filterField;
+export const getContactsList = state => state.contacts.list;

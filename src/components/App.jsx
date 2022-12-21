@@ -3,12 +3,8 @@ import Form from './Section/Form/Form';
 import ContactsList from './Section/ContactsList/ContactsList';
 import Filter from './Section/Filter/Filter';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  addContact,
-  filterChange,
-  getContactsList,
-  getFilterFieldValue,
-} from 'redux/contactsSlice';
+import { addContact, getContactsList } from 'redux/contactsSlice';
+import { filterChange, getFilterFieldValue } from 'redux/filterSlice';
 
 function App() {
   const contacts = useSelector(getContactsList);
