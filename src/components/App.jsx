@@ -1,15 +1,19 @@
-import { useState } from 'react';
 import Section from './Section/Section';
 import Form from './Section/Form/Form';
 import ContactsList from './Section/ContactsList/ContactsList';
 import Filter from './Section/Filter/Filter';
-import useLocalStorage from './hooks/useLocalStorage';
-
-const CONTACTS = 'contacts';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addContact,
+  filterChange,
+  getContactsList,
+  getFilterFieldValue,
+} from 'redux/contactsSlice';
 
 function App() {
-  const [contacts, setContacts] = useLocalStorage(CONTACTS, []);
-  const [filter, setFilter] = useState('');
+  const contacts = useSelector(getContactsList);
+  const filterField = useSelector(getFilterFieldValue);
+  const dispatch = useDispatch();
 
   const addToContactList = newContact => {
     const { name: newName } = newContact;
@@ -18,24 +22,19 @@ function App() {
     !contacts.find(
       ({ name: prevName }) => prevName.toLowerCase() === normalizedNewName
     )
-      ? setContacts(prev => [...prev, newContact])
+      ? dispatch(addContact(newContact))
       : alert(`${newName} is already in contacts`);
   };
 
-  const filterContacts = e => setFilter(e.currentTarget.value);
-
   const findContact = () => {
-    const normalizedFilterValue = filter.toLowerCase();
+    const normalizedFilterFieldValue = filterField.toLowerCase();
 
     return contacts.filter(({ name }) =>
-      name.toLowerCase().includes(normalizedFilterValue)
+      name.toLowerCase().includes(normalizedFilterFieldValue)
     );
   };
 
-  const deleteContact = contactId =>
-    setContacts(contacts.filter(({ id }) => id !== contactId));
-
-  const foundContact = findContact();
+  const foundContacts = findContact();
 
   return (
     <div>
@@ -45,11 +44,11 @@ function App() {
       <Section title="Contacts">
         {contacts.length > 0 && (
           <>
-            <Filter value={filter} onChange={filterContacts} />
-            <ContactsList
-              foundContact={foundContact}
-              deleteContact={deleteContact}
+            <Filter
+              value={filterField}
+              onChange={e => dispatch(filterChange(e.currentTarget.value))}
             />
+            <ContactsList foundContacts={foundContacts} />
           </>
         )}
       </Section>
