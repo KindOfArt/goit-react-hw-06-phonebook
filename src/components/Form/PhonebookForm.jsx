@@ -34,6 +34,7 @@ const PhonebookForm = () => {
               required
             />
           </div>
+          <br />
           <div>
             <label htmlFor="number">Number:</label>
             <Field
@@ -47,6 +48,7 @@ const PhonebookForm = () => {
               required
             />
           </div>
+          <br />
           <button type="submit">Add to contacts</button>
         </Form>
       </Formik>
